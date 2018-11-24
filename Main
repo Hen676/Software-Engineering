@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Web.Script.Serialization;
 
-namespace ImdbProgram
+namespace ACME_Film_Client
 {
     public class ImdbEntity
     {
+        public string filmNameModified;
+
         public string Title { get; set; }
         public string Year { get; set; }
         public string Rated { get; set; }
@@ -30,14 +32,39 @@ namespace ImdbProgram
         public string imdbID { get; set; }
         public string Type { get; set; }
 
-        public void GetReleases()
+        public void SearchFilm()
         {
+            string filmName = Console.ReadLine();
+            filmNameModified = filmName.Replace(" ", "+");
+
             HttpClient httpClient = new HttpClient();
 
-            string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/" + "t=Guardians+of+the+Galaxy+Vol.+2" + "&apikey=8727e147")).Result;
+            string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&apikey=8727e147")).Result;
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
-            Console.WriteLine(omdb.Actors);
-            Console.WriteLine(omdb.Year);
+
+            displayInfo(omdb);
+        }
+
+        void displayInfo(ImdbEntity film)
+        {
+            Console.WriteLine("Title:" + film.Title);
+            Console.WriteLine("Year:" + film.Year);
+            Console.WriteLine("Rated:" + film.Rated);
+            Console.WriteLine("Released:" + film.Released);
+            Console.WriteLine("Runtime:" + film.Runtime);
+            Console.WriteLine("Genre:" + film.Genre);
+            Console.WriteLine("Director:" + film.Director);
+            Console.WriteLine("Director:" + film.Writer);
+            Console.WriteLine("Actors:" + film.Actors);
+            Console.WriteLine("Plot:" + film.Plot);
+            Console.WriteLine("Language:" + film.Language);
+            Console.WriteLine("Country:" + film.Country);
+            Console.WriteLine("Awards:" + film.Awards);
+            Console.WriteLine("Poster link:" + film.Poster);
+            Console.WriteLine("Metascore:" + film.Metascore);
+            Console.WriteLine("imdb rating:" + film.imdbRating);
+            Console.WriteLine("imdb ID:" + film.imdbID);
+            Console.WriteLine("Type:" + film.Type);
         }
     }
 
@@ -46,7 +73,8 @@ namespace ImdbProgram
         static void Main(string[] args)
         {
             ImdbEntity obj = new ImdbEntity();
-            obj.GetReleases();
+            Console.WriteLine("You are searching by film, please input a film title:");
+            obj.SearchFilm();
             Console.Read();
         }
     }
