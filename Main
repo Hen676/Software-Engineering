@@ -33,13 +33,11 @@ namespace ACME_Film_Client
         public string imdbID;
         public string Type;
 
-        public void SearchTitle()
+        public void SearchTitle(HttpClient httpClient)
         {
             Console.WriteLine("You are searching by film title, please input a film title:");
             string filmName = Console.ReadLine();
             filmNameModified = filmName.Replace(" ", "+");
-
-            HttpClient httpClient = new HttpClient();
 
             string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&apikey=8727e147")).Result;
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
@@ -54,19 +52,17 @@ namespace ACME_Film_Client
             }
         }
 
-        public void SearchID()
+        public void SearchID(HttpClient httpClient)
         {
-            Console.WriteLine("You are searching by film ID, please input a film title:");
+            Console.WriteLine("You are searching by film ID, please input a film ID:");
             filmID = Console.ReadLine();
-
-            HttpClient httpClient = new HttpClient();
 
             string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?i=" + filmID + "&apikey=8727e147")).Result;
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
 
             if (omdb.Title == null)
             {
-                Console.WriteLine("No such film exists...");
+                Console.WriteLine("No such ID exists...");
             }
             else
             {
@@ -102,7 +98,9 @@ namespace ACME_Film_Client
         static void Main(string[] args)
         {
             bool loop = true;
+
             ImdbEntity filmEntity = new ImdbEntity();
+            HttpClient httpClient = new HttpClient();
 
             while (loop == true)
             {
@@ -111,10 +109,12 @@ namespace ACME_Film_Client
                 switch (i)
                 {
                     case "1":
-                        filmEntity.SearchTitle();
+                        filmEntity.SearchTitle(httpClient);
                         break;
                     case "2":
-                        filmEntity.SearchID();
+                        filmEntity.SearchID(httpClient);
+                        break;
+                    default:
                         break;
                 }
             }
