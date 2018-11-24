@@ -11,29 +11,31 @@ namespace ACME_Film_Client
     public class ImdbEntity
     {
         public string filmNameModified;
+        public string filmID;
 
-        public string Title { get; set; }
-        public string Year { get; set; }
-        public string Rated { get; set; }
-        public string Released { get; set; }
-        public string Runtime { get; set; }
-        public string Genre { get; set; }
-        public string Director { get; set; }
-        public string Writer { get; set; }
-        public string Actors { get; set; }
-        public string Plot { get; set; }
-        public string Language { get; set; }
-        public string Country { get; set; }
-        public string Awards { get; set; }
-        public string Poster { get; set; }
-        public string Metascore { get; set; }
-        public string imdbRating { get; set; }
-        public string imdbVotes { get; set; }
-        public string imdbID { get; set; }
-        public string Type { get; set; }
+        public string Title;
+        public string Year;
+        public string Rated;
+        public string Released;
+        public string Runtime;
+        public string Genre;
+        public string Director;
+        public string Writer;
+        public string Actors;
+        public string Plot;
+        public string Language;
+        public string Country;
+        public string Awards;
+        public string Poster;
+        public string Metascore;
+        public string imdbRating;
+        public string imdbVotes;
+        public string imdbID;
+        public string Type;
 
-        public void SearchFilm()
+        public void SearchTitle()
         {
+            Console.WriteLine("You are searching by film title, please input a film title:");
             string filmName = Console.ReadLine();
             filmNameModified = filmName.Replace(" ", "+");
 
@@ -42,7 +44,34 @@ namespace ACME_Film_Client
             string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&apikey=8727e147")).Result;
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
 
-            displayInfo(omdb);
+            if (omdb.Title == null)
+            {
+                Console.WriteLine("No such film exists...");
+            }
+            else
+            {
+                displayInfo(omdb);
+            }
+        }
+
+        public void SearchID()
+        {
+            Console.WriteLine("You are searching by film ID, please input a film title:");
+            filmID = Console.ReadLine();
+
+            HttpClient httpClient = new HttpClient();
+
+            string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?i=" + filmID + "&apikey=8727e147")).Result;
+            ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
+
+            if (omdb.Title == null)
+            {
+                Console.WriteLine("No such film exists...");
+            }
+            else
+            {
+                displayInfo(omdb);
+            }
         }
 
         void displayInfo(ImdbEntity film)
@@ -72,10 +101,23 @@ namespace ACME_Film_Client
     {
         static void Main(string[] args)
         {
-            ImdbEntity obj = new ImdbEntity();
-            Console.WriteLine("You are searching by film, please input a film title:");
-            obj.SearchFilm();
-            Console.Read();
+            bool loop = true;
+            ImdbEntity filmEntity = new ImdbEntity();
+
+            while (loop == true)
+            {
+                Console.WriteLine("What do you want to search by?\n1. Title\n2. ID");
+                string i = Console.ReadLine();
+                switch (i)
+                {
+                    case "1":
+                        filmEntity.SearchTitle();
+                        break;
+                    case "2":
+                        filmEntity.SearchID();
+                        break;
+                }
+            }
         }
     }
 }
