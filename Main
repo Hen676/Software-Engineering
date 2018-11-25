@@ -1,17 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Web.Script.Serialization;
-
-namespace ACME_Film_Client
-{
-    public class ImdbEntity
+public class ImdbEntity
     {
+        HttpClient httpClient = new HttpClient();
+
         public string filmNameModified;
-        public string filmID;
 
         public string Title;
         public string Year;
@@ -33,91 +24,31 @@ namespace ACME_Film_Client
         public string imdbID;
         public string Type;
 
-        public void SearchTitle(HttpClient httpClient)
+        public ImdbEntity SearchTitle(string searchText)
         {
-            Console.WriteLine("You are searching by film title, please input a film title:");
-            string filmName = Console.ReadLine();
-            filmNameModified = filmName.Replace(" ", "+");
+            filmNameModified = searchText.Replace(" ", "+");
 
             string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&apikey=8727e147")).Result;
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
 
             if (omdb.Title == null)
             {
-                Console.WriteLine("No such film exists...");
+                omdb.Title = "No such film exists";
             }
-            else
-            {
-                displayInfo(omdb);
-            }
+
+            return omdb;
         }
 
-        public void SearchID(HttpClient httpClient)
+        public ImdbEntity SearchID(string filmID)
         {
-            Console.WriteLine("You are searching by film ID, please input a film ID:");
-            filmID = Console.ReadLine();
-
             string response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?i=" + filmID + "&apikey=8727e147")).Result;
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
 
             if (omdb.Title == null)
             {
-                Console.WriteLine("No such ID exists...");
+                omdb.Title = "No such ID exists";
             }
-            else
-            {
-                displayInfo(omdb);
-            }
-        }
 
-        void displayInfo(ImdbEntity film)
-        {
-            Console.WriteLine("Title:" + film.Title);
-            Console.WriteLine("Year:" + film.Year);
-            Console.WriteLine("Rated:" + film.Rated);
-            Console.WriteLine("Released:" + film.Released);
-            Console.WriteLine("Runtime:" + film.Runtime);
-            Console.WriteLine("Genre:" + film.Genre);
-            Console.WriteLine("Director:" + film.Director);
-            Console.WriteLine("Director:" + film.Writer);
-            Console.WriteLine("Actors:" + film.Actors);
-            Console.WriteLine("Plot:" + film.Plot);
-            Console.WriteLine("Language:" + film.Language);
-            Console.WriteLine("Country:" + film.Country);
-            Console.WriteLine("Awards:" + film.Awards);
-            Console.WriteLine("Poster link:" + film.Poster);
-            Console.WriteLine("Metascore:" + film.Metascore);
-            Console.WriteLine("imdb rating:" + film.imdbRating);
-            Console.WriteLine("imdb ID:" + film.imdbID);
-            Console.WriteLine("Type:" + film.Type);
+            return omdb;
         }
     }
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            bool loop = true;
-
-            ImdbEntity filmEntity = new ImdbEntity();
-            HttpClient httpClient = new HttpClient();
-
-            while (loop == true)
-            {
-                Console.WriteLine("What do you want to search by?\n1. Title\n2. ID");
-                string i = Console.ReadLine();
-                switch (i)
-                {
-                    case "1":
-                        filmEntity.SearchTitle(httpClient);
-                        break;
-                    case "2":
-                        filmEntity.SearchID(httpClient);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-}
