@@ -42,7 +42,7 @@ namespace ACME_Movie_Client
 
         private void Button1(object sender, RoutedEventArgs e)
         {
-            list.Items.Add("1");
+            list.Items.Add(film.Title);
         }
 
         private void Button2(object sender, RoutedEventArgs e)
