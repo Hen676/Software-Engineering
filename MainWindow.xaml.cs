@@ -40,3 +40,18 @@ namespace WpfApp1
 		}
 	}
 }
+
+/*
+<Grid Margin="10,10,12,8">
+
+        <ListBox Name="list" Margin="10,84,567,10">
+            <ListBoxItem IsSelected="true">movie-1</ListBoxItem>
+            <ListBoxItem IsSelected="true">movie-2</ListBoxItem>
+            <ListBoxItem IsSelected="true">movie-3</ListBoxItem>
+        </ListBox>
+
+        <Button Name="button1" Click="Button1">1</Button>
+        <Button Name="button2" Click="Button2">2</Button>
+	
+</Grid>
+*/
