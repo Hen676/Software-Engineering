@@ -16,6 +16,12 @@ using System.Windows.Shapes;
 using System.Net.Http;
 using System.Web.Script.Serialization;
 
+using Newtonsoft.Json;
+using TMDbLib.Client;
+using TMDbLib.Objects.General;
+using TMDbLib.Objects.Movies;
+using TMDbLib.Objects.Search;
+
 namespace ACME_Movie_Client
 {
     /// <summary>
@@ -24,7 +30,11 @@ namespace ACME_Movie_Client
     public partial class MainWindow : Window
     {
         ImdbEntity film = new ImdbEntity();
+        TmdbEntity film2 = new TmdbEntity();
+
         bool searchByFilm = true;
+        bool searchByImdb = true;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +50,16 @@ namespace ACME_Movie_Client
             searchByFilm = false;
         }
 
+        private void radioButton2_Checked(object sender, RoutedEventArgs e)
+        {
+            searchByImdb = true;
+        }
+
+        private void radioButton3_Checked(object sender, RoutedEventArgs e)
+        {
+            searchByImdb = false;
+        }
+
         private void Button1(object sender, RoutedEventArgs e)
         {
             list.Items.Add(film.Title);
@@ -49,12 +69,12 @@ namespace ACME_Movie_Client
         {
             try
             {
-                string index = list.SelectedItem.ToString();
+                //string index = list.SelectedItem.ToString();
                 list.Items.Remove(list.SelectedItems[0]);
             }
             catch
             {
-                MessageBox.Show("No item selected for deleation");
+                MessageBox.Show("No item selected for deletion");
             }
         }
 
@@ -74,30 +94,66 @@ namespace ACME_Movie_Client
         {
             if (e.Key == Key.Return)
             {
-                if(searchByFilm == true)
-                film = film.SearchTitle(textBox1.Text);
+                if (searchByImdb == true)
+                {
+                    if (searchByFilm == true)
+                    {
+                        film = film.SearchTitle(textBox1.Text);
+                    }
+                    else
+                    {
+                        film = film.SearchID(textBox1.Text);
+                    }
+                    textBlock1.Text = "Title: " + film.Title;
+                    textBlock2.Text = "Year: " + film.Year;
+                    textBlock3.Text = "Rated: " + film.Rated;
+                    textBlock3.Text = "Released: " + film.Released;
+                    textBlock4.Text = "Runtime: " + film.Runtime;
+                    textBlock5.Text = "Genre: " + film.Genre;
+                    textBlock6.Text = "Director: " + film.Director;
+                    textBlock7.Text = "Writer: " + film.Writer;
+                    textBlock8.Text = "Actors: " + film.Actors;
+                    textBlock9.Text = "Plot: " + film.Plot;
+                    textBlock10.Text = "Language: " + film.Language;
+                    textBlock11.Text = "Country: " + film.Country;
+                    textBlock12.Text = "Awards: " + film.Awards;
+                    textBlock13.Text = "Poster: " + film.Poster;
+                    textBlock14.Text = "Metascore: " + film.Metascore;
+                    textBlock15.Text = "imdb rating: " + film.imdbRating;
+                    textBlock16.Text = "imdb votes: " + film.imdbVotes;
+                    textBlock17.Text = "imdb ID: " + film.imdbID;
+                    textBlock18.Text = "Type: " + film.Type;
+                }
                 else
-                film = film.SearchID(textBox1.Text);
-
-                textBlock1.Text = "Title: " + film.Title;
-                textBlock2.Text = "Year: " + film.Year;
-                textBlock3.Text = "Rated: " + film.Rated;
-                textBlock3.Text = "Released: " + film.Released;
-                textBlock4.Text = "Runtime: " + film.Runtime;
-                textBlock5.Text = "Genre: " + film.Genre;
-                textBlock6.Text = "Director: " + film.Director;
-                textBlock7.Text = "Writer: " + film.Writer;
-                textBlock8.Text = "Actors: " + film.Actors;
-                textBlock9.Text = "Plot: " + film.Plot;
-                textBlock10.Text = "Language: " + film.Language;
-                textBlock11.Text = "Country: " + film.Country;
-                textBlock12.Text = "Awards: " + film.Awards;
-                textBlock13.Text = "Poster: " + film.Poster;
-                textBlock14.Text = "Metascore: " + film.Metascore;
-                textBlock15.Text = "imdb rating: " + film.imdbRating;
-                textBlock16.Text = "imdb votes: " + film.imdbVotes;
-                textBlock17.Text = "imdb ID: " + film.imdbID;
-                textBlock18.Text = "Type: " + film.Type;
+                {
+                    if(searchByFilm == true)
+                    {
+                        //Add search by film functionality
+                    }
+                    else
+                    {
+                        Movie desiredFilm = film2.SearchID(textBox1.Text);
+                        textBlock1.Text = "Title: " + desiredFilm.Title;
+                        textBlock2.Text = "Release date: " + desiredFilm.ReleaseDate.ToString();
+                        textBlock3.Text = "Popularity: " + desiredFilm.Popularity.ToString();
+                        textBlock4.Text = "Runtime: " + desiredFilm.Runtime.ToString();
+                        textBlock5.Text = "Budget: " + desiredFilm.Budget.ToString();
+                        textBlock6.Text = "Poster link: " + desiredFilm.PosterPath;
+                        textBlock7.Text = "Revenue: " + desiredFilm.Revenue.ToString();
+                        textBlock8.Text = "Overview: " + desiredFilm.Overview;
+                        textBlock9.Text = "Original language: " + desiredFilm.OriginalLanguage;
+                        textBlock10.Text = "Keywords: " + desiredFilm.Keywords;
+                        textBlock11.Text = "Adult: " + desiredFilm.Adult.ToString();
+                        textBlock12.Text = "Vote average: " + desiredFilm.VoteAverage.ToString();
+                        textBlock13.Text = "Vote count: " + desiredFilm.VoteCount.ToString();
+                        textBlock14.Text = "";
+                        textBlock15.Text = "";
+                        textBlock16.Text = "";
+                        textBlock17.Text = "";
+                        textBlock18.Text = "";
+                    }
+                }
+               
             }
         }
     }
@@ -155,12 +211,41 @@ namespace ACME_Movie_Client
             return omdb;
         }
     }
+
+    class TmdbEntity
+    {
+        Movie movie;
+        public Movie SearchID(string searchText)
+        {
+            try
+            {
+               int id = Convert.ToInt32(searchText);
+               TMDbClient client = new TMDbClient("1206a7b3fff9fa9951f843442e161c6a");
+               movie = client.GetMovieAsync(id).Result;
+            }
+            catch
+            {
+                MessageBox.Show("ID contains no letters");
+            }
+            return movie;
+        }
+    }
 }
 
-/*<Grid>
+/*<Window x:Class="ACME_Movie_Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ACME_Movie_Client"
+        mc:Ignorable="d"
+        Title="ACME Movie Client" Height="500" Width="1000">
+    <Grid>
         <!--<TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select a message option and then choose the Display button" VerticalAlignment="Top" Margin="107,10,0,0"/>-->
-        <RadioButton x:Name="radioButton" Content="Search by title&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="762,5,0,0" Checked="radioButton_Checked"  IsChecked="True"/>
-        <RadioButton x:Name="radioButton1" Content="Search by ID&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="875,5,0,0" Checked="radioButton1_Checked"/>
+        <RadioButton x:Name="radioButton" GroupName="search" Content="Search by title&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="762,5,0,0" Checked="radioButton_Checked"  IsChecked="True"/>
+        <RadioButton x:Name="radioButton1" GroupName="search" Content="Search by ID&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="875,5,0,0" Checked="radioButton1_Checked"/>
+        <RadioButton x:Name="radioButton2" GroupName="database" Content="Search by Imdb&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="762,24,0,0" Checked="radioButton2_Checked"  IsChecked="True" Height="26"/>
+        <RadioButton x:Name="radioButton3" GroupName="database" Content="Search by Tmdb&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="875,24,0,0" Checked="radioButton3_Checked"/>
         <!--<Button x:Name="button" Content="Display" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="207,79,0,0" Click="button_Click"/>-->
         <!--<ListBox x:Name="list" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="207,79,0,0"/>-->
         <StackPanel>
@@ -187,11 +272,10 @@ namespace ACME_Movie_Client
         </StackPanel>
 
         <ListBox Name="list" Margin="624,351,10,28">
-            <ListBoxItem IsSelected="true">movie-1</ListBoxItem>
-            <ListBoxItem IsSelected="true">movie-2</ListBoxItem>
-            <ListBoxItem IsSelected="true">movie-3</ListBoxItem>
+
         </ListBox>
 
-        <Button x:Name="button2" Click="Button2" Content="Delete favourite" Margin="880,19,10,425" RenderTransformOrigin="0.5,0.5"></Button>
-        <Button x:Name="button1" Click="Button1" Content="Add favourite" Margin="760,19,122,425"/>
-    </Grid>*/
+        <Button x:Name="button2" Click="Button2" Content="Delete favourite" Margin="880,41,10,403" RenderTransformOrigin="0.5,0.5"></Button>
+        <Button x:Name="button1" Click="Button1" Content="Add favourite" Margin="762,41,120,403"/>
+    </Grid>
+</Window>*/
