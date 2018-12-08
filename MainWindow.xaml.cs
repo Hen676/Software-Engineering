@@ -192,6 +192,24 @@ namespace ACME_Movie_Client
                     textBlock16.Text = "imdb votes: " + film.imdbVotes;
                     textBlock17.Text = "imdb ID: " + film.imdbID;
                     textBlock18.Text = "Type: " + film.Type;
+
+                    try
+                    {
+                        wrapper.Children.Clear();
+                        Image img = new Image();
+                        BitmapImage image = new BitmapImage();
+                        image.BeginInit();
+                        image.UriSource = new Uri(film.Poster, UriKind.Absolute);
+                        image.EndInit();
+
+                        img.Source = image;
+                        wrapper.Children.Add(img);
+                    }
+                    catch
+                    {
+
+                    }
+
                 }
                 else
                 {

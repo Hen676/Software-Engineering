@@ -45,5 +45,9 @@
         <Button x:Name="button3" Click="Button3" Content="Search by: Title" Margin="762,11,120,433"/>
         <Button x:Name="button2" Click="Button2" Content="Delete favourite" Margin="880,41,10,403" RenderTransformOrigin="0.5,0.5"></Button>
         <Button x:Name="button1" Click="Button1" Content="Add favourite" Margin="762,41,120,403"/>
+
+        <WrapPanel Name="wrapper" Margin="786,118,28,118">
+            
+        </WrapPanel>
     </Grid>
 </Window>
