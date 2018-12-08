@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ACME_Movie_Client"
         mc:Ignorable="d"
-        Title="ACME Movie Client" Height="500" Width="1000" MinHeight="500" MinWidth="1000" MaxHeight="500" MaxWidth="1000">
+        Title="ACME Movie Client" Height="500" Width="1250" MinHeight="500" MinWidth="1250" MaxHeight="500" MaxWidth="1250">
     <Grid>
         <!--<TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select a message option and then choose the Display button" VerticalAlignment="Top" Margin="107,10,0,0"/>-->
         <!--<RadioButton x:Name="radioButton" GroupName="search" Content="Search by title&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="762,5,0,0" Checked="radioButton_Checked"  IsChecked="True"/>
@@ -24,8 +24,8 @@
             <TextBlock Width="1250" Height="20" x:Name="textBlock5"/>
             <TextBlock Width="1250" Height="20" x:Name="textBlock6"/>
             <TextBlock Width="1250" Height="20" x:Name="textBlock7"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock8"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock9"/>
+            <TextBlock Height="20" x:Name="textBlock8" Margin="0,0,280,0"/>
+            <TextBlock TextWrapping="Wrap" Height="98" x:Name="textBlock9" Margin="0,0,331,0"/>
             <TextBlock Width="1250" Height="20" x:Name="textBlock10"/>
             <TextBlock Width="1250" Height="20" x:Name="textBlock11"/>
             <TextBlock Width="1250" Height="20" x:Name="textBlock12"/>
@@ -36,18 +36,19 @@
             <TextBlock Width="1250" Height="20" x:Name="textBlock17"/>
             <TextBlock Width="1250" Height="20" x:Name="textBlock18"/>
         </StackPanel>
-        
+
         <ListBox Name="List" Margin="624,351,10,28" SelectionChanged="PrintText" SelectionMode="Single">
 
         </ListBox>
-        <Button x:Name="button5" Click="Button5" Content="Short plot" Margin="762,71,120,373"/>
-        <Button x:Name="button4" Click="Button4" Content="Database: IMDB" Margin="880,11,10,433"/>
-        <Button x:Name="button3" Click="Button3" Content="Search by: Title" Margin="762,11,120,433"/>
-        <Button x:Name="button2" Click="Button2" Content="Delete favourite" Margin="880,41,10,403" RenderTransformOrigin="0.5,0.5"></Button>
-        <Button x:Name="button1" Click="Button1" Content="Add favourite" Margin="762,41,120,403"/>
+        <Button x:Name="button6" Click="Button6" Content="ID Randomiser" Margin="891,127,246,317"/>
+        <Button x:Name="button5" Click="Button5" Content="Short plot" Margin="773,127,356,317"/>
+        <Button x:Name="button4" Click="Button4" Content="Database: IMDB" Margin="891,67,246,377"/>
+        <Button x:Name="button3" Click="Button3" Content="Search by: Title" Margin="773,67,356,377"/>
+        <Button x:Name="button2" Click="Button2" Content="Delete favourite" Margin="891,97,246,347" RenderTransformOrigin="0.5,0.5"></Button>
+        <Button x:Name="button1" Click="Button1" Content="Add favourite" Margin="773,97,356,347"/>
 
-        <WrapPanel Name="wrapper" Margin="786,118,28,118">
-            
+        <WrapPanel Name="wrapper" Margin="1001,10,19,118">
+
         </WrapPanel>
     </Grid>
 </Window>

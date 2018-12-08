@@ -84,6 +84,34 @@ namespace ACME_Movie_Client
             }
         }
 
+        void Button6(object sender, RoutedEventArgs e)
+        {
+            ImdbEntity movie = new ImdbEntity();
+            Random rnd = new Random();
+            bool repeatLoop = true;
+            
+            while(repeatLoop)
+            if (searchByImdb == true)
+            {
+                int one = rnd.Next(0, 10);
+                int two = rnd.Next(0, 10);
+                int three = rnd.Next(0, 10);
+                int four = rnd.Next(0, 10);
+                int five = rnd.Next(0, 10);
+                int six = rnd.Next(0, 10);
+                int seven = rnd.Next(0, 10);
+
+                string id = "tt" + one + two + three + four + five + six + seven;
+                movie = film.SearchID(id, searchShortPlot);
+
+                    if (movie.Title != "No such ID exists")
+                    {
+                        textBox1.Text = id;
+                        repeatLoop = false;
+                    }
+            }
+        }
+
         //private void radioButton_Checked(object sender, RoutedEventArgs e)
         //{
         //    searchByFilm = true;
@@ -120,9 +148,14 @@ namespace ACME_Movie_Client
 
         private void Button2(object sender, RoutedEventArgs e)
         {
-
-                //string index = list.SelectedItem.ToString();
+            try
+            {
                 List.Items.Remove(List.SelectedItems[0]);
+            }
+            catch
+            {
+                MessageBox.Show("No film selected for deletion");
+            }
             
         }
 
