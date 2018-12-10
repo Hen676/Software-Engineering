@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ACME_Movie_Client"
         mc:Ignorable="d"
-        Title="ACME Movie Client" Height="500" Width="1250" MinHeight="500" MinWidth="1250" MaxHeight="500" MaxWidth="1250">
+        Title="ACME Movie Client" Height="700" Width="1250" MinHeight="700" MinWidth="1250" MaxHeight="700" MaxWidth="1250">
     <Grid>
         <!--<TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select a message option and then choose the Display button" VerticalAlignment="Top" Margin="107,10,0,0"/>-->
         <!--<RadioButton x:Name="radioButton" GroupName="search" Content="Search by title&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="762,5,0,0" Checked="radioButton_Checked"  IsChecked="True"/>
@@ -17,38 +17,38 @@
         <StackPanel>
             <TextBlock Height="20" Margin="10,0,673,0" RenderTransformOrigin="0.336,0.9"><Run Text="Type some text into the TextBox and press the Enter key."/></TextBlock>
             <TextBox Height="20" x:Name="textBox1" KeyDown="OnKeyDownHandler" Margin="0,0,243,0"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock1"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock2"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock3"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock4"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock5"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock6"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock7"/>
-            <TextBlock Height="20" x:Name="textBlock8" Margin="0,0,280,0"/>
-            <TextBlock TextWrapping="Wrap" Height="98" x:Name="textBlock9" Margin="0,0,331,0"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock10"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock11"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock12"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock13"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock14"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock15"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock16"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock17"/>
-            <TextBlock Width="1250" Height="20" x:Name="textBlock18"/>
+            <TextBlock Height="20" x:Name="textBlock1" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock2" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock3" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock4" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock5" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock6" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock7" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock8" Margin="0,0,243,0"/>
+            <TextBlock TextWrapping="Wrap" Height="98" x:Name="textBlock9" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock10" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock11" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock12" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock13" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock14" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock15" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock16" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock17" Margin="0,0,243,0"/>
+            <TextBlock Height="20" x:Name="textBlock18" Margin="0,0,243,0"/>
+            <TextBox Height="176" x:Name="textBox_comment" KeyDown="OnKeyDownHandler" Margin="0,0,673,0"/>
         </StackPanel>
 
-        <ListBox Name="List" Margin="624,351,10,28" SelectionChanged="PrintText" SelectionMode="Single">
+        <ListBox Name="List" Margin="696,482,10,10" SelectionChanged="PrintText" SelectionMode="Single" RenderTransformOrigin="0.49,0.637"/>
+        <Button x:Name="button6" Click="Button6" Height="25" Content="ID Randomiser" Margin="1122,52,0,0" HorizontalAlignment="Left" Width="113" VerticalAlignment="Top"/>
+        <Button x:Name="button5" Click="Button5" Height="25" Content="Short plot" Margin="1004,52,125,0" VerticalAlignment="Top"/>
+        <Button x:Name="button4" Click="Button4" Height="25" Content="Database: IMDB" Margin="1122,0,0,625" HorizontalAlignment="Left" Width="113" VerticalAlignment="Bottom"/>
+        <Button x:Name="button3" Click="Button3" Height="25" Content="Search by: Title" Margin="1004,0,0,625" HorizontalAlignment="Left" Width="113" VerticalAlignment="Bottom"/>
+        <Button x:Name="button2" Click="Button2" Height="25" Content="Delete favourite" Margin="0,630,551,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="113" VerticalAlignment="Top"></Button>
+        <Button x:Name="button1" Click="Button1" Height="25" Content="Add favourite" Margin="0,600,551,0" HorizontalAlignment="Right" Width="113" VerticalAlignment="Top"/>
 
-        </ListBox>
-        <Button x:Name="button6" Click="Button6" Content="ID Randomiser" Margin="891,127,246,317"/>
-        <Button x:Name="button5" Click="Button5" Content="Short plot" Margin="773,127,356,317"/>
-        <Button x:Name="button4" Click="Button4" Content="Database: IMDB" Margin="891,67,246,377"/>
-        <Button x:Name="button3" Click="Button3" Content="Search by: Title" Margin="773,67,356,377"/>
-        <Button x:Name="button2" Click="Button2" Content="Delete favourite" Margin="891,97,246,347" RenderTransformOrigin="0.5,0.5"></Button>
-        <Button x:Name="button1" Click="Button1" Content="Add favourite" Margin="773,97,356,347"/>
-
-        <WrapPanel Name="wrapper" Margin="1001,10,19,118">
+        <WrapPanel Name="wrapper" Margin="1004,84,0,44" HorizontalAlignment="Left" Width="222">
 
         </WrapPanel>
     </Grid>
 </Window>
+
