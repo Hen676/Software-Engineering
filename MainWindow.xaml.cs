@@ -132,6 +132,29 @@ namespace ACME_Movie_Client
                     if (movie.Title != "No such ID exists")
                     {
                         textBox1.Text = id;
+
+                        film = film.SearchID(id, searchShortPlot);
+
+                        textBlock1.Text = "Title: " + film.Title;
+                        textBlock2.Text = "Year: " + film.Year;
+                        textBlock3.Text = "Rated: " + film.Rated;
+                        textBlock3.Text = "Released: " + film.Released;
+                        textBlock4.Text = "Runtime: " + film.Runtime;
+                        textBlock5.Text = "Genre: " + film.Genre;
+                        textBlock6.Text = "Director: " + film.Director;
+                        textBlock7.Text = "Writer: " + film.Writer;
+                        textBlock8.Text = "Actors: " + film.Actors;
+                        textBlock9.Text = "Plot: " + film.Plot;
+                        textBlock10.Text = "Language: " + film.Language;
+                        textBlock11.Text = "Country: " + film.Country;
+                        textBlock12.Text = "Awards: " + film.Awards;
+                        textBlock13.Text = "Poster: " + film.Poster;
+                        textBlock14.Text = "Metascore: " + film.Metascore;
+                        textBlock15.Text = "imdb rating: " + film.imdbRating;
+                        textBlock16.Text = "imdb votes: " + film.imdbVotes;
+                        textBlock17.Text = "imdb ID: " + film.imdbID;
+                        textBlock18.Text = "Type: " + film.Type;
+
                         repeatLoop = false;
                     }
                 }
