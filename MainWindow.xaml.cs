@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,9 +37,33 @@ namespace ACME_Movie_Client
         bool searchByImdb = true;
         bool searchShortPlot = true;
 
+        string[] name;
+        string[] comment;
+        int name_sum = 0;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            try
+            {
+                name = System.IO.File.ReadAllLines("Favorite_name.txt");
+                name_sum = name.Length;
+
+                int x = 0;
+                while (x < name_sum)
+                {
+                    List.Items.Add(name[x]);
+                    x++;
+                }
+
+            }
+            catch { }
+            try
+            {
+                comment = System.IO.File.ReadAllLines("Favorite_comment.txt");
+            }
+            catch { }
         }
 
         void Button3(object sender, RoutedEventArgs e)
@@ -89,27 +114,27 @@ namespace ACME_Movie_Client
             ImdbEntity movie = new ImdbEntity();
             Random rnd = new Random();
             bool repeatLoop = true;
-            
-            while(repeatLoop)
-            if (searchByImdb == true)
-            {
-                int one = rnd.Next(0, 10);
-                int two = rnd.Next(0, 10);
-                int three = rnd.Next(0, 10);
-                int four = rnd.Next(0, 10);
-                int five = rnd.Next(0, 10);
-                int six = rnd.Next(0, 10);
-                int seven = rnd.Next(0, 10);
 
-                string id = "tt" + one + two + three + four + five + six + seven;
-                movie = film.SearchID(id, searchShortPlot);
+            while (repeatLoop)
+                if (searchByImdb == true)
+                {
+                    int one = rnd.Next(0, 10);
+                    int two = rnd.Next(0, 10);
+                    int three = rnd.Next(0, 10);
+                    int four = rnd.Next(0, 10);
+                    int five = rnd.Next(0, 10);
+                    int six = rnd.Next(0, 10);
+                    int seven = rnd.Next(0, 10);
+
+                    string id = "tt" + one + two + three + four + five + six + seven;
+                    movie = film.SearchID(id, searchShortPlot);
 
                     if (movie.Title != "No such ID exists")
                     {
                         textBox1.Text = id;
                         repeatLoop = false;
                     }
-            }
+                }
         }
 
         //private void radioButton_Checked(object sender, RoutedEventArgs e)
@@ -138,6 +163,10 @@ namespace ACME_Movie_Client
             try
             {
                 List.Items.Add(newString.Remove(0, 7));
+
+                name = List.Items.OfType<string>().ToArray();
+
+                System.IO.File.WriteAllLines("Favorite_name.txt", name);
             }
             catch
             {
@@ -150,13 +179,17 @@ namespace ACME_Movie_Client
         {
             try
             {
-                List.Items.Remove(List.SelectedItems[0]);
+                List.Items.Remove(List.SelectedItem);
+
+                name = List.Items.OfType<string>().ToArray();
+
+                System.IO.File.WriteAllLines("Favorite_name.txt", name);
             }
             catch
             {
                 MessageBox.Show("No film selected for deletion");
             }
-            
+
         }
 
         void PrintText(object sender, SelectionChangedEventArgs args)
@@ -164,12 +197,45 @@ namespace ACME_Movie_Client
             try
             {
                 string curItem = List.SelectedItem.ToString();
-                MessageBox.Show(curItem);
-            }
-            catch
-            {
+
+                film = film.SearchTitle(curItem, searchShortPlot);
+
+                textBlock1.Text = "Title: " + film.Title;
+                textBlock2.Text = "Year: " + film.Year;
+                textBlock3.Text = "Rated: " + film.Rated;
+                textBlock3.Text = "Released: " + film.Released;
+                textBlock4.Text = "Runtime: " + film.Runtime;
+                textBlock5.Text = "Genre: " + film.Genre;
+                textBlock6.Text = "Director: " + film.Director;
+                textBlock7.Text = "Writer: " + film.Writer;
+                textBlock8.Text = "Actors: " + film.Actors;
+                textBlock9.Text = "Plot: " + film.Plot;
+                textBlock10.Text = "Language: " + film.Language;
+                textBlock11.Text = "Country: " + film.Country;
+                textBlock12.Text = "Awards: " + film.Awards;
+                textBlock13.Text = "Poster: " + film.Poster;
+                textBlock14.Text = "Metascore: " + film.Metascore;
+                textBlock15.Text = "imdb rating: " + film.imdbRating;
+                textBlock16.Text = "imdb votes: " + film.imdbVotes;
+                textBlock17.Text = "imdb ID: " + film.imdbID;
+                textBlock18.Text = "Type: " + film.Type;
+
+                try
+                {
+                    wrapper.Children.Clear();
+                    Image img = new Image();
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(film.Poster, UriKind.Absolute);
+                    image.EndInit();
+
+                    img.Source = image;
+                    wrapper.Children.Add(img);
+                }
+                catch { }
 
             }
+            catch { }
         }
 
         //private void button_Click(object sender, RoutedEventArgs e)
@@ -309,9 +375,9 @@ namespace ACME_Movie_Client
             string response;
 
             if (shortPlot == true)
-            response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&apikey=8727e147")).Result;
+                response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&apikey=8727e147")).Result;
             else
-            response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&plot=full&apikey=8727e147")).Result;
+                response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?t=" + filmNameModified + "&plot=full&apikey=8727e147")).Result;
 
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
 
@@ -328,9 +394,9 @@ namespace ACME_Movie_Client
             string response;
 
             if (shortPlot == true)
-            response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?i=" + filmID + "&apikey=8727e147")).Result;
+                response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?i=" + filmID + "&apikey=8727e147")).Result;
             else
-            response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?i=" + filmID + "&plot=full&apikey=8727e147")).Result;
+                response = httpClient.GetStringAsync(new Uri("http://www.omdbapi.com/?i=" + filmID + "&plot=full&apikey=8727e147")).Result;
             ImdbEntity omdb = new JavaScriptSerializer().Deserialize<ImdbEntity>(response);
 
             if (omdb.Title == null)
