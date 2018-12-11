@@ -151,6 +151,20 @@ namespace ACME_Movie_Client
                         textBlock17.Text = "imdb ID: " + film.imdbID;
                         textBlock18.Text = "Type: " + film.Type;
 
+                        try //image loader
+                        {
+                            wrapper.Children.Clear();
+                            Image img = new Image();
+                            BitmapImage image = new BitmapImage();
+                            image.BeginInit();
+                            image.UriSource = new Uri(film.Poster, UriKind.Absolute);
+                            image.EndInit();
+
+                            img.Source = image;
+                            wrapper.Children.Add(img);
+                        }
+                        catch { }
+
                         repeatLoop = false;
                     }
                 }
@@ -192,47 +206,48 @@ namespace ACME_Movie_Client
                 if (List.Items.Count.ToString() != "1")
                 {
                     string temp1 = List.SelectedItem.ToString();
-                string temp2 = "";
-                List.Items.Remove(List.SelectedItem);
+                    string temp2 = "";
+                    List.Items.Remove(List.SelectedItem);
 
-                if (Favorite == null || Favorite.Length == 0)
-                {
-                    List<string> listF = new List<string>();
-
-                    int x = 0;
-                    while (x < Favorite.Length)
+                    if (Favorite == null || Favorite.Length == 0)
                     {
-                        string[] words = Favorite[x].Split(separatingChar);
-                        if (words[0] == temp1)
+                        List<string> listF = new List<string>();
+
+                        int x = 0;
+                        while (x < Favorite.Length)
                         {
-                            temp2 = words[1];
+                            string[] words = Favorite[x].Split(separatingChar);
+                            if (words[0] == temp1)
+                            {
+                                temp2 = words[1];
+                            }
+                            x++;
                         }
-                        x++;
+
+                        listF.Remove(temp1 + "^" + temp2);
+                        Favorite = listF.OfType<string>().ToArray();
                     }
-
-                    listF.Remove(temp1 + "^" + temp2);
-                    Favorite = listF.OfType<string>().ToArray();
-                }
-                else
-                {
-                    List<string> listF = new List<string>(Favorite);
-
-                    int x = 0;
-                    while (x < Favorite.Length)
+                    else
                     {
-                        string[] words = Favorite[x].Split(separatingChar);
-                        if (words[0] == temp1)
+                        List<string> listF = new List<string>(Favorite);
+
+                        int x = 0;
+                        while (x < Favorite.Length)
                         {
-                            temp2 = words[1];
+                            string[] words = Favorite[x].Split(separatingChar);
+                            if (words[0] == temp1)
+                            {
+                                temp2 = words[1];
+                            }
+                            x++;
                         }
-                        x++;
+
+                        listF.Remove(temp1 + "^" + temp2);
+                        Favorite = listF.OfType<string>().ToArray();
+
                     }
-
-                    listF.Remove(temp1 + "^" + temp2);
-                    Favorite = listF.OfType<string>().ToArray();
-
+                    System.IO.File.WriteAllLines("Favorite.txt", Favorite);
                 }
-                System.IO.File.WriteAllLines("Favorite.txt", Favorite);
             }
             catch
             {
