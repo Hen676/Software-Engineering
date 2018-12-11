@@ -60,11 +60,6 @@ namespace ACME_Movie_Client
                		}
             	}
 		catch {  }
-            if (File.Exists("Favorite.txt") == false)
-            {
-                string[] temp = { "Garry^Long" };
-                System.IO.File.WriteAllLines("Favorite.txt", temp);
-            }
         }
 
         void Button3(object sender, RoutedEventArgs e)
@@ -166,9 +161,19 @@ namespace ACME_Movie_Client
             string newString = textBlock1.Text;
             try
             {
-                List<string> listF = new List<string>(Favorite);
-                listF.Add(newString.Remove(0, 7) + "^" + textBox_comment.Text);
-                Favorite = listF.OfType<string>().ToArray();
+                if (Favorite == null || Favorite.Length == 0)
+                {
+                    List<string> listF = new List<string>();
+                    listF.Add(newString.Remove(0, 7) + "^" + textBox_comment.Text);
+                    Favorite = listF.OfType<string>().ToArray();
+                }
+                else
+                { 
+                    List<string> listF = new List<string>(Favorite);
+                    listF.Add(newString.Remove(0, 7) + "^" + textBox_comment.Text);
+                    Favorite = listF.OfType<string>().ToArray();
+
+                }
 
                 System.IO.File.WriteAllLines("Favorite.txt", Favorite);
                 List.Items.Add(newString.Remove(0, 7));
@@ -187,9 +192,29 @@ namespace ACME_Movie_Client
                 if (List.Items.Count.ToString() != "1")
                 {
                     string temp1 = List.SelectedItem.ToString();
-                    string temp2 = "";
-                    List.Items.Remove(List.SelectedItem);
+                string temp2 = "";
+                List.Items.Remove(List.SelectedItem);
 
+                if (Favorite == null || Favorite.Length == 0)
+                {
+                    List<string> listF = new List<string>();
+
+                    int x = 0;
+                    while (x < Favorite.Length)
+                    {
+                        string[] words = Favorite[x].Split(separatingChar);
+                        if (words[0] == temp1)
+                        {
+                            temp2 = words[1];
+                        }
+                        x++;
+                    }
+
+                    listF.Remove(temp1 + "^" + temp2);
+                    Favorite = listF.OfType<string>().ToArray();
+                }
+                else
+                {
                     List<string> listF = new List<string>(Favorite);
 
                     int x = 0;
@@ -205,10 +230,9 @@ namespace ACME_Movie_Client
 
                     listF.Remove(temp1 + "^" + temp2);
                     Favorite = listF.OfType<string>().ToArray();
-                    System.IO.File.WriteAllLines("Favorite.txt", Favorite);
+
                 }
-                else
-                    MessageBox.Show("Must have atleast one film Favorited");
+                System.IO.File.WriteAllLines("Favorite.txt", Favorite);
             }
             catch
             {
