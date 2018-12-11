@@ -203,8 +203,6 @@ namespace ACME_Movie_Client
         {
             try
             {
-                if (List.Items.Count.ToString() != "1")
-                {
                     string temp1 = List.SelectedItem.ToString();
                     string temp2 = "";
                     List.Items.Remove(List.SelectedItem);
@@ -247,7 +245,6 @@ namespace ACME_Movie_Client
 
                     }
                     System.IO.File.WriteAllLines("Favorite.txt", Favorite);
-                }
             }
             catch
             {
