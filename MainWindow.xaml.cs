@@ -60,7 +60,7 @@ namespace ACME_Movie_Client
                		}
             	}
 		catch {  }
-            if (File.Exists("Favorite.txt") != true)
+            if (File.Exists("Favorite.txt") == false)
             {
                 string[] temp = { "Garry^Long" };
                 System.IO.File.WriteAllLines("Favorite.txt", temp);
