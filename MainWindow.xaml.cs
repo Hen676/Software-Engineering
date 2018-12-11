@@ -41,25 +41,25 @@ namespace ACME_Movie_Client
         char separatingChar = '^';
 
         public MainWindow()
-		{
-			InitializeComponent();
+	{
+		InitializeComponent();
 
-			try
-			{
-                Favorite = System.IO.File.ReadAllLines("Favorite.txt");
-                int x = 0;
-                while (x < Favorite.Length)
-                {
-                    string[] words = { "", "" };
-                    if (Favorite[x].Contains('^'))
-                    {
-                        words = Favorite[x].Split(separatingChar);
-                    }
-                    List.Items.Add(words[0]);
-                    x++;
-                }
-            }
-			catch {  }
+		try
+		{
+                	Favorite = System.IO.File.ReadAllLines("Favorite.txt");
+                	int x = 0;
+                	while (x < Favorite.Length)
+                	{
+                	    string[] words = { "", "" };
+                	    if (Favorite[x].Contains('^'))
+                	    {
+                	        words = Favorite[x].Split(separatingChar);
+                 	   }
+                	    List.Items.Add(words[0]);
+                	    x++;
+               		}
+            	}
+		catch {  }
             if (File.Exists("Favorite.txt") != true)
             {
                 string[] temp = { "Garry^Long" };
@@ -246,18 +246,18 @@ namespace ACME_Movie_Client
                 textBlock18.Text = "Type: " + film.Type;
 
                 try //image loader
-				{
-					wrapper.Children.Clear();
-					Image img = new Image();
-					BitmapImage image = new BitmapImage();
-					image.BeginInit();
-					image.UriSource = new Uri(film.Poster, UriKind.Absolute);
-					image.EndInit();
+		{
+			wrapper.Children.Clear();
+			Image img = new Image();
+			BitmapImage image = new BitmapImage();
+			image.BeginInit();
+			image.UriSource = new Uri(film.Poster, UriKind.Absolute);
+			image.EndInit();
 
-					img.Source = image;
-					wrapper.Children.Add(img);
-				}
-				catch { }
+			img.Source = image;
+			wrapper.Children.Add(img);
+		}
+		catch { }
 
                 try //comment loader
                 {
@@ -275,6 +275,7 @@ namespace ACME_Movie_Client
                         x++;
                     }
                 }
+		catch { }
             }
             catch { }
         }
