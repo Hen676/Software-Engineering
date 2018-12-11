@@ -37,33 +37,34 @@ namespace ACME_Movie_Client
         bool searchByImdb = true;
         bool searchShortPlot = true;
 
-        string[] name;
-        string[] comment;
-        int name_sum = 0;
+        string[] Favorite;
+        char separatingChar = '^';
 
         public MainWindow()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 
-            try
-            {
-                name = System.IO.File.ReadAllLines("Favorite_name.txt");
-                name_sum = name.Length;
-
+			try
+			{
+                Favorite = System.IO.File.ReadAllLines("Favorite.txt");
                 int x = 0;
-                while (x < name_sum)
+                while (x < Favorite.Length)
                 {
-                    List.Items.Add(name[x]);
+                    string[] words = { "", "" };
+                    if (Favorite[x].Contains('^'))
+                    {
+                        words = Favorite[x].Split(separatingChar);
+                    }
+                    List.Items.Add(words[0]);
                     x++;
                 }
-
             }
-            catch { }
-            try
+			catch {  }
+            if (File.Exists("Favorite.txt") != true)
             {
-                comment = System.IO.File.ReadAllLines("Favorite_comment.txt");
+                string[] temp = { "Garry^Long" };
+                System.IO.File.WriteAllLines("Favorite.txt", temp);
             }
-            catch { }
         }
 
         void Button3(object sender, RoutedEventArgs e)
@@ -160,36 +161,17 @@ namespace ACME_Movie_Client
                 }
         }
 
-        //private void radioButton_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    searchByFilm = true;
-        //}
-
-        //private void radioButton1_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    searchByFilm = false;
-        //}
-
-        //private void radioButton2_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    searchByImdb = true;
-        //}
-
-        //private void radioButton3_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    searchByImdb = false;
-        //}
-
         private void Button1(object sender, RoutedEventArgs e)
         {
             string newString = textBlock1.Text;
             try
             {
+                List<string> listF = new List<string>(Favorite);
+                listF.Add(newString.Remove(0, 7) + "^" + textBox_comment.Text);
+                Favorite = listF.OfType<string>().ToArray();
+
+                System.IO.File.WriteAllLines("Favorite.txt", Favorite);
                 List.Items.Add(newString.Remove(0, 7));
-
-                name = List.Items.OfType<string>().ToArray();
-
-                System.IO.File.WriteAllLines("Favorite_name.txt", name);
             }
             catch
             {
@@ -202,11 +184,31 @@ namespace ACME_Movie_Client
         {
             try
             {
-                List.Items.Remove(List.SelectedItem);
+                if (List.Items.Count.ToString() != "1")
+                {
+                    string temp1 = List.SelectedItem.ToString();
+                    string temp2 = "";
+                    List.Items.Remove(List.SelectedItem);
 
-                name = List.Items.OfType<string>().ToArray();
+                    List<string> listF = new List<string>(Favorite);
 
-                System.IO.File.WriteAllLines("Favorite_name.txt", name);
+                    int x = 0;
+                    while (x < Favorite.Length)
+                    {
+                        string[] words = Favorite[x].Split(separatingChar);
+                        if (words[0] == temp1)
+                        {
+                            temp2 = words[1];
+                        }
+                        x++;
+                    }
+
+                    listF.Remove(temp1 + "^" + temp2);
+                    Favorite = listF.OfType<string>().ToArray();
+                    System.IO.File.WriteAllLines("Favorite.txt", Favorite);
+                }
+                else
+                    MessageBox.Show("Must have atleast one film Favorited");
             }
             catch
             {
@@ -243,35 +245,39 @@ namespace ACME_Movie_Client
                 textBlock17.Text = "imdb ID: " + film.imdbID;
                 textBlock18.Text = "Type: " + film.Type;
 
-                try
+                try //image loader
+				{
+					wrapper.Children.Clear();
+					Image img = new Image();
+					BitmapImage image = new BitmapImage();
+					image.BeginInit();
+					image.UriSource = new Uri(film.Poster, UriKind.Absolute);
+					image.EndInit();
+
+					img.Source = image;
+					wrapper.Children.Add(img);
+				}
+				catch { }
+
+                try //comment loader
                 {
-                    wrapper.Children.Clear();
-                    Image img = new Image();
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri(film.Poster, UriKind.Absolute);
-                    image.EndInit();
+                    int x = 0;
+                    while (x < Favorite.Length)
+                    {
+                        string temp1 = Favorite[x];
+                        char separatingChars = '^';
+                        string[] words = temp1.Split(separatingChars);
 
-                    img.Source = image;
-                    wrapper.Children.Add(img);
+                        if (film.Title == words[0])
+                        {
+                            textBox_comment.Text = words[1];
+                        }
+                        x++;
+                    }
                 }
-                catch { }
-
             }
             catch { }
         }
-
-        //private void button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (radioButton.IsChecked == true)
-        //    {
-        //        MessageBox.Show("Hello.");
-        //    }
-        //    else if (radioButton1.IsChecked == true)
-        //    {
-        //        MessageBox.Show("Goodbye.");
-        //    }
-        //}
 
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
